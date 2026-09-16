@@ -5,10 +5,14 @@ import static br.pucpr.planet.PlanetType.DWARF;
 import static br.pucpr.planet.PlanetType.ICE;
 import static br.pucpr.table.Theme.LIGHT;
 
+import br.pucpr.planet.DiameterColumn;
 import br.pucpr.planet.Planet;
-import br.pucpr.planet.PlanetsTableData;
+import br.pucpr.planet.SunDistanceAuColumn;
+import br.pucpr.planet.SunDistanceKmColumn;
+import br.pucpr.planet.TypeColumn;
 import br.pucpr.table.Table;
 import br.pucpr.table.model.ColumnTableData;
+import br.pucpr.table.model.PagedTableData;
 import br.pucpr.user.CpfColumn;
 import br.pucpr.user.EmailColumn;
 import br.pucpr.user.IdColumn;
@@ -28,18 +32,18 @@ public class Main {
     usuarios.add(new User(105L, "Lucas Mendes", "lucas@email.com", "12345"));
     usuarios.add(new User(106L, "", "beatriz@email.com", "55566677788"));
 
-    System.out.println("IMPRIMINDO USUARIOS");
-    System.out.println("-------------------");
-    new Table(
-            new ColumnTableData<>(
-                usuarios,
-                new IdColumn(),
-                new NameColumn(),
-                new CpfColumn(),
-                new EmailColumn()),
-            LIGHT,
-            true)
-        .print();
+    final var userData =
+        new ColumnTableData<>(
+            usuarios,
+            new IdColumn(),
+            new NameColumn(),
+            new CpfColumn(),
+            new EmailColumn());
+
+    System.out.println("IMPRIMINDO USUARIOS (PAGINA 1/2, TAMANHO 3)");
+    System.out.println("------------------------------------------");
+    final var pagedUsers = new PagedTableData(userData, 3, 1);
+    new Table(pagedUsers, LIGHT, true).print();
 
     final var planetas = new ArrayList<Planet>();
     planetas.add(new Planet("Mercúrio", 4879, 57_910_000L, ROCK));
@@ -52,9 +56,19 @@ public class Main {
     planetas.add(new Planet("Netuno", 49528, 4_504_300_000L, ICE));
     planetas.add(new Planet("Plutão", 2376, 5_906_380_000L, DWARF));
 
+    final var planetData =
+        new ColumnTableData<>(
+            planetas,
+            new br.pucpr.planet.NameColumn(),
+            new DiameterColumn(),
+            new SunDistanceKmColumn(),
+            new SunDistanceAuColumn(),
+            new TypeColumn());
+
     System.out.println();
-    System.out.println("IMPRIMINDO PLANETAS");
-    System.out.println("-------------------");
-    new Table(new PlanetsTableData(planetas)).print();
+    System.out.println("IMPRIMINDO PLANETAS (PAGINA 2/3, TAMANHO 4)");
+    System.out.println("------------------------------------------");
+    final var pagedPlanets = new PagedTableData(planetData, 4, 2);
+    new Table(pagedPlanets).print();
   }
 }
