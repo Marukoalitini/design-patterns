@@ -1,8 +1,9 @@
 package br.pucpr;
 
-import static br.pucpr.planet.PlanetType.*;
 import static br.pucpr.planet.PlanetType.DWARF;
+import static br.pucpr.planet.PlanetType.GAS;
 import static br.pucpr.planet.PlanetType.ICE;
+import static br.pucpr.planet.PlanetType.ROCK;
 import static br.pucpr.table.Theme.LIGHT;
 
 import br.pucpr.planet.DiameterColumn;
@@ -40,10 +41,25 @@ public class Main {
             new CpfColumn(),
             new EmailColumn());
 
-    System.out.println("IMPRIMINDO USUARIOS (PAGINA 1/2, TAMANHO 3)");
-    System.out.println("------------------------------------------");
     final var pagedUsers = new PagedTableData(userData, 3, 1);
-    new Table(pagedUsers, LIGHT, true).print();
+    final var userTable = new Table(pagedUsers, LIGHT, true);
+
+    // Registrando a tabela como observadora para redesenhar quando os dados mudarem
+    pagedUsers.addObserver(userTable);
+
+    System.out.println("IMPRIMINDO USUARIOS (PAGINA 1)");
+    System.out.println("------------------------------");
+    userTable.print();
+
+    System.out.println();
+    System.out.println("IMPRIMINDO USUARIOS (PAGINA 2)");
+    System.out.println("------------------------------");
+    pagedUsers.nextPage();
+
+    System.out.println();
+    System.out.println("IMPRIMINDO USUARIOS (APOS ADICIONAR NOVO USUARIO)");
+    System.out.println("-------------------------------------------------");
+    userData.add(new User(107L, "Fernanda Lima", "fernanda@email.com", "99988877766"));
 
     final var planetas = new ArrayList<Planet>();
     planetas.add(new Planet("Mercúrio", 4879, 57_910_000L, ROCK));
@@ -66,9 +82,8 @@ public class Main {
             new TypeColumn());
 
     System.out.println();
-    System.out.println("IMPRIMINDO PLANETAS (PAGINA 2/3, TAMANHO 4)");
-    System.out.println("------------------------------------------");
-    final var pagedPlanets = new PagedTableData(planetData, 4, 2);
-    new Table(pagedPlanets).print();
+    System.out.println("IMPRIMINDO PLANETAS");
+    System.out.println("-------------------");
+    new Table(planetData).print();
   }
 }

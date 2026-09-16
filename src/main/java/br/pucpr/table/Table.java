@@ -1,9 +1,10 @@
 package br.pucpr.table;
 
 import br.pucpr.table.model.TableData;
+import br.pucpr.table.model.TableDataObserver;
 import java.util.ArrayList;
 
-public final class Table {
+public final class Table implements TableDataObserver {
   private TableData data;
   private Theme theme;
   private boolean alignRight;
@@ -54,6 +55,11 @@ public final class Table {
 
   public void print() {
     System.out.print(this);
+  }
+
+  @Override
+  public void onDataChanged(TableData source) {
+    print();
   }
 
   private String headerLine() {

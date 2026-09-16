@@ -1,6 +1,6 @@
 package br.pucpr.table.model;
 
-public class PagedTableData implements TableData {
+public class PagedTableData extends ObservableTableData implements TableDataObserver {
   private final TableData data;
   private int pageSize;
   private int page;
@@ -18,10 +18,19 @@ public class PagedTableData implements TableData {
     this.data = data;
     this.pageSize = pageSize;
     this.page = page;
+
+    if (data instanceof ObservableTableData observable) {
+      observable.addObserver(this);
+    }
   }
 
   public PagedTableData(TableData data, int pageSize) {
     this(data, pageSize, 1);
+  }
+
+  @Override
+  public void onDataChanged(TableData source) {
+    notifyObservers();
   }
 
   public int getPage() {
@@ -32,7 +41,10 @@ public class PagedTableData implements TableData {
     if (page <= 0) {
       throw new IllegalArgumentException("Page must be greater than 0");
     }
-    this.page = page;
+    if (this.page != page) {
+      this.page = page;
+      notifyObservers();
+    }
   }
 
   public int getPageSize() {
@@ -43,7 +55,10 @@ public class PagedTableData implements TableData {
     if (pageSize <= 0) {
       throw new IllegalArgumentException("Page size must be greater than 0");
     }
-    this.pageSize = pageSize;
+    if (this.pageSize != pageSize) {
+      this.pageSize = pageSize;
+      notifyObservers();
+    }
   }
 
   public int getTotalRows() {
@@ -65,13 +80,13 @@ public class PagedTableData implements TableData {
 
   public void nextPage() {
     if (hasNextPage()) {
-      page++;
+      setPage(page + 1);
     }
   }
 
   public void previousPage() {
     if (hasPreviousPage()) {
-      page--;
+      setPage(page - 1);
     }
   }
 
