@@ -1,6 +1,6 @@
-Marco ALija Ramos Agostini
-EDMUND SOARES DE SOUSA
-Richard Mickaell Santos Nascimento
+- Marco Alija Ramos Agostini
+- EDMUND SOARES DE SOUSA
+- Richard Mickaell Santos Nascimento
 
 # Atividade
 
